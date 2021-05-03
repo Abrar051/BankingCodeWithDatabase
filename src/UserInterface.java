@@ -11,7 +11,9 @@ public class UserInterface {
         DatabaseCreateDelete data = new DatabaseCreateDelete();
         DatabaseManagement customer = new DatabaseManagement();
         data.CreateDatabase();
-        customer.CreateTable();
+        customer.createTable();
+        customer.insertRecords();
+        customer.showRecords();
         data.DropDatabase();
     }
 }

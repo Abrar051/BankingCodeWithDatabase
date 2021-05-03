@@ -1,7 +1,9 @@
 import java.sql.*;
 
 
-public class DatabaseCreateDelete {
+public class DatabaseCreateDelete
+
+{
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost/";
