@@ -8,8 +8,10 @@ public class UserInterface {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         Registration user = new Registration();
-        DatabaseManagement data = new DatabaseManagement();
+        DatabaseCreateDelete data = new DatabaseCreateDelete();
+        DatabaseManagement customer = new DatabaseManagement();
         data.CreateDatabase();
+        customer.CreateTable();
         data.DropDatabase();
     }
 }
