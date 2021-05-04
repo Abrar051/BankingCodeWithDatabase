@@ -12,7 +12,8 @@ public class UserInterface {
         DatabaseManagement customer = new DatabaseManagement();
         data.CreateDatabase();
         customer.createTable();
-        customer.insertRecords();
+        customer.insertRecords(1,"user","password", 23.45);
+        customer.insertRecords(2,"user2","password",24.5);
         customer.showRecords();
         data.DropDatabase();
     }
