@@ -13,7 +13,10 @@ public class UserInterface {
         data.CreateDatabase();
         customer.createTable();
         customer.insertRecords(1,"user","password", 23.45);
-        customer.insertRecords(2,"user2","password",24.5);
+        customer.insertRecords(2,"user2","password2",24.5);
+        customer.insertRecords(3,"user3","password3",29.5);
+        customer.showRecords();
+        customer.updateRecords(3,25);
         customer.showRecords();
         data.DropDatabase();
     }
