@@ -92,6 +92,51 @@ public class DatabaseManagement {
         }
     }
 
+    public void showRecords (String user,String passWord)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected database successfully...");
+            stmt = conn.createStatement();
+            String sql = "SELECT id, first, last, amount FROM Registration";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                double amount = rs.getInt("amount");
+                String userid = rs.getString("first");
+                String password = rs.getString("last");
+                if (userid.equals(user) && password.equals(passWord))
+                {
+                    System.out.print(" ID: " + id);
+                    System.out.println(" Amount : " + amount);
+                    break;
+                }
+            }
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    conn.close();
+            } catch (SQLException se) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+
+
     public void updateRecords (int idNumber , double amount)
     {
         System.out.println("Updating database result");
