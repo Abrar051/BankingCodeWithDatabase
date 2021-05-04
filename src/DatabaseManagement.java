@@ -37,17 +37,14 @@ public class DatabaseManagement {
                 se.printStackTrace();
             }
         }
-        System.out.println("Goodbye!");
     }
 
     public void insertRecords(int id, String user, String password, double amount) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement();
         ) {
-            System.out.println("Inserting records into the table...");
             String sql = "INSERT INTO Registration VALUES (" + id + ", '" + user + "', '" + password + "', " + amount + ")";
             stmt.executeUpdate(sql);
-            System.out.println("Inserted records into the table...");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,29 +54,19 @@ public class DatabaseManagement {
         Connection conn = null;
         Statement stmt = null;
         try {
-            //STEP 2: Register JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
-
-            //STEP 3: Open a connection
             System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Connected database successfully...");
-
-            //STEP 4: Execute a query
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
-
             String sql = "SELECT id, first, last, amount FROM Registration";
             ResultSet rs = stmt.executeQuery(sql);
-            //STEP 5: Extract data from result set
             while (rs.next()) {
-                //Retrieve by column name
                 int id = rs.getInt("id");
                 double amount = rs.getInt("amount");
                 String first = rs.getString("first");
                 String last = rs.getString("last");
-
-                //Display values
                 System.out.print(" ID: " + id);
                 System.out.print(" Amount : " + amount);
                 System.out.print(" User id :" + first);
@@ -103,7 +90,6 @@ public class DatabaseManagement {
                 se.printStackTrace();
             }
         }
-        System.out.println("Goodbye!");
     }
 
     public void updateRecords (int idNumber , double amount)
