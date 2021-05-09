@@ -9,7 +9,6 @@ public abstract class Account  {
         this.amount+=amnt;
     }
 
-
     public void printAmount(){
         System.out.println("Current balance: "+this.amount);
     }

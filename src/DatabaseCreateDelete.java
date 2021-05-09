@@ -1,21 +1,18 @@
 import java.sql.*;
 
 
-public class DatabaseCreateDelete
+public class DatabaseCreateDelete {
 
-{
-    // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost/";
 
-    //  Database credentials
     static final String USER = "root";
     static final String PASS = "password";
 
-    public  void CreateDatabase() {
+    public void CreateDatabase() {
         Connection conn = null;
         Statement stmt = null;
-        try{
+        try {
             //STEP 2: Register JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
 
@@ -30,23 +27,23 @@ public class DatabaseCreateDelete
             String sql = "CREATE DATABASE BankInfo";
             stmt.executeUpdate(sql);
             System.out.println("Database created successfully...");
-        }catch(SQLException se){
+        } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
-        }catch(Exception e){
+        } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
-        }finally{
+        } finally {
             //finally block used to close resources
-            try{
-                if(stmt!=null)
+            try {
+                if (stmt != null)
                     stmt.close();
-            }catch(SQLException se2){
+            } catch (SQLException se2) {
             }// nothing we can do
-            try{
-                if(conn!=null)
+            try {
+                if (conn != null)
                     conn.close();
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }//end finally try
         }//end try
@@ -56,45 +53,33 @@ public class DatabaseCreateDelete
     public void DropDatabase() {
         Connection conn = null;
         Statement stmt = null;
-        try{
-            //STEP 2: Register JDBC driver
+        try {
             Class.forName("com.mysql.jdbc.Driver");
-
-            //STEP 3: Open a connection
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Connected database successfully...");
-
-            //STEP 4: Execute a query
-            System.out.println("Deleting database...");
+            System.out.println("Refreshing database...");
             stmt = conn.createStatement();
 
             String sql = "DROP DATABASE BankInfo";
             stmt.executeUpdate(sql);
-            System.out.println("Database deleted successfully...");
-        }catch(SQLException se){
-            //Handle errors for JDBC
+            System.out.println("Refreshed database successfully...");
+        } catch (SQLException se) {
             se.printStackTrace();
-        }catch(Exception e){
-            //Handle errors for Class.forName
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
-            //finally block used to close resources
-            try{
-                if(stmt!=null)
+        } finally {
+            try {
+                if (stmt != null)
                     conn.close();
-            }catch(SQLException se){
-            }// do nothing
-            try{
-                if(conn!=null)
+            } catch (SQLException se) {
+            }
+            try {
+                if (conn != null)
                     conn.close();
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
-            }//end finally try
-        }//end try
-        System.out.println("Goodbye!");
+            }
+        }
     }
-
 
 
 }

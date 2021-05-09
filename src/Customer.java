@@ -3,11 +3,13 @@ public class Customer  {
     private String name;
     private String pass;
     private int accNo;
+    private float amount;
 
-    public Customer(String name, String pass, int accNo) {
+    public Customer(String name, String pass, int accNo,float amount) {
         this.name = name;
         this.pass = pass;
         this.accNo = accNo;
+        this.amount=amount;
     }
 
     public int getAccNo() {
