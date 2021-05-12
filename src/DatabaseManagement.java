@@ -18,7 +18,6 @@ public class DatabaseManagement {
             stmt = conn.createStatement();
             String sql = "CREATE TABLE REGISTRATION " + "(id INTEGER not NULL, " + " first VARCHAR(255), " + " mid VARCHAR(255), " + " last VARCHAR(255), " + " amount INTEGER, " + " PRIMARY KEY ( id ))";
             stmt.executeUpdate(sql);
-            //System.out.println("Created table in given database...");
         } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
@@ -38,39 +37,15 @@ public class DatabaseManagement {
         }
     }
 
-    public void insertRecords(int id, String user,String type, String password, double amount) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "INSERT INTO Registration VALUES (" + id + ", '" + user + "', '" +type+"', '"+ password + "', " + amount + ")";
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showRecords() {
+    public void createSavingTable() {
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Connected database successfully...");
             stmt = conn.createStatement();
-            String sql = "SELECT id, first, last, amount FROM Registration";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                double amount = rs.getInt("amount");
-                String first = rs.getString("first");
-                String last = rs.getString("last");
-                System.out.print(" ID: " + id);
-                System.out.print(" Amount : " + amount);
-                System.out.print(" User id :" + first);
-                System.out.println("  Password: " + last);
-            }
-            rs.close();
+            String sql = "CREATE TABLE SAVINGS " + "(id INTEGER not NULL, " + " first VARCHAR(255), " + " last VARCHAR(255), " + " amount INTEGER, " + " PRIMARY KEY ( id ))";
+            stmt.executeUpdate(sql);
         } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
@@ -90,7 +65,30 @@ public class DatabaseManagement {
         }
     }
 
-    public int extractId (String user,String passWord) {
+    public void insertSavingRecord(int id, String user, String pass, int limit) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "INSERT INTO Savings VALUES (" + id + ", '" + user + "', '" + pass + "', " + limit + ")";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertRecords(int id, String user, String type, String password, double amount) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "INSERT INTO Registration VALUES (" + id + ", '" + user + "', '" + type + "', '" + password + "', " + amount + ")";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public int extractId(String user, String passWord) {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -151,7 +149,7 @@ public class DatabaseManagement {
                 if (userid.equals(user) && password.equals(passWord)) {
                     System.out.print(" ID: " + id);
                     System.out.println(" Amount : " + amount);
-                    System.out.println(" Id type "+type);
+                    System.out.println(" Id type " + type);
                     break;
                 }
             }
@@ -175,13 +173,105 @@ public class DatabaseManagement {
         }
     }
 
-    public double extractBalance (String user , String passWord)
-    {
+    public void updateSavingsRecords(String user, String passWord, float withdraw) {
+        float balance = (float) extractBalance(user, passWord);
+        int limit = extractSavingLimit(user, passWord);
+        if (balance > limit) {
+            balance = balance - withdraw;
+            updateRecords(extractId(user, passWord), balance);
+            showRecords(user, passWord);
+        } else {
+            System.out.println("Can't withdraw more than limit ");
+        }
+    }
+
+    public int extractSavingLimit(String user, String passWord) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected database successfully...");
+            stmt = conn.createStatement();
+            String sql = "SELECT id, first, last, amount FROM SAVINGS";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int amount = rs.getInt("amount");
+                String userid = rs.getString("first");
+                String password = rs.getString("last");
+                if (userid.equals(user) && password.equals(passWord)) {
+                    return amount;
+                }
+            }
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    conn.close();
+            } catch (SQLException se) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public String extractType(String user, String passWord) {
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             //System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT id, first, mid , last, amount FROM Registration";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                double amount = rs.getInt("amount");
+                String userid = rs.getString("first");
+                String type = rs.getString("mid");
+                String password = rs.getString("last");
+                if (userid.equals(user) && password.equals(passWord)) {
+                    return type;
+                }
+            }
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    conn.close();
+            } catch (SQLException se) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public double extractBalance(String user, String passWord) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
             String sql = "SELECT id, first, mid , last, amount FROM Registration";

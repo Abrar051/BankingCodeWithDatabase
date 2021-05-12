@@ -47,7 +47,7 @@ public class DatabaseCreateDelete {
                 se.printStackTrace();
             }//end finally try
         }//end try
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
     }
 
     public void DropDatabase() {

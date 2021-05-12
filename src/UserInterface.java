@@ -11,9 +11,9 @@ public class UserInterface {
         Registration user = new Registration();
         DatabaseCreateDelete data = new DatabaseCreateDelete();
         DatabaseManagement customer = new DatabaseManagement();
-        data.DropDatabase();
         data.CreateDatabase();
         customer.createTable();
+        customer.createSavingTable();
         int primaryAccountNum = 1;
         while (true) {
             System.out.println(" Enter r for registration , s for signup and b for break : ");
